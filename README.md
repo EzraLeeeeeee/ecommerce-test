@@ -17,3 +17,7 @@ or
 1. python tests/test_checkout.py
 or
 2. pytest tests/test_checkout.py -v
+
+## 產生測試報告
+pytest tests/test_checkout.py --browser=chrome --html=reports/report.html --self-contained-html
+

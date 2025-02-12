@@ -1,104 +1,100 @@
+import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.edge.options import Options as EdgeOptions
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-import sys
-import os
-# 添加當前目錄的上級目錄到 Python 模組搜索路徑
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
 from pages.cart_page import CartPage
 from pages.checkout_page import CheckoutPage
-from selenium.webdriver.common.by import By
-import time
 
-def test_complete_checkout():
-    # 初始化 Chrome 選項和服務
-    chrome_options = Options()
-    service = Service(ChromeDriverManager().install())
-    
-    # 正確初始化 WebDriver
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+@pytest.fixture
+def driver(request):
+    """ 根據參數選擇瀏覽器 """
+    browser = request.config.getoption("--browser", default="chrome")
+
+    if browser == "chrome":
+        options = ChromeOptions()
+        service = ChromeService(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, options=options)
+
+    elif browser == "firefox":
+        options = FirefoxOptions()
+        service = FirefoxService(GeckoDriverManager().install())
+        driver = webdriver.Firefox(service=service, options=options)
+
+    elif browser == "edge":
+        options = EdgeOptions()
+        service = EdgeService(EdgeChromiumDriverManager().install())
+        driver = webdriver.Edge(service=service, options=options)
+
+    else:
+        raise ValueError("❌ Unsupported browser: Use 'chrome', 'firefox', or 'edge'")
+
     driver.get("https://www.saucedemo.com/")
-
-    try:
-        # 1️⃣ 登入
-        login_page = LoginPage(driver)
-        login_page.login("standard_user", "secret_sauce")
-        time.sleep(2)
-
-        # 2️⃣ 瀏覽商品 & 排序
-        inventory_page = InventoryPage(driver)
-        inventory_page.sort_items("Price (low to high)")
-        time.sleep(2)
-
-        # 3️⃣ 加入商品到購物車並進入購物車頁面
-        inventory_page.add_item_to_cart()
-        inventory_page.go_to_cart()
-        time.sleep(2)
-
-        # 4️⃣ 進入結帳頁面
-        cart_page = CartPage(driver)
-        cart_page.proceed_to_checkout()
-        time.sleep(2)
-
-        # 5️⃣ 填寫結帳資訊
-        checkout_page = CheckoutPage(driver)
-        checkout_page.enter_checkout_info("Ezra", "Test", "12345")
-        time.sleep(2)
-
-        # 6️⃣ 完成下單
-        checkout_page.finish_checkout()
-        time.sleep(2)
-
-        assert "checkout-complete.html" in driver.current_url, "結帳流程測試失敗"
-        print("✅ 測試通過，成功完成結帳！")
-
-    finally:
-        driver.quit()
-
-
-
-def test_missing_info():
-     # 初始化 Chrome 選項和服務
-    chrome_options = Options()
-    service = Service(ChromeDriverManager().install())
-    
-    # 正確初始化 WebDriver
-    driver = webdriver.Chrome(service=service, options=chrome_options)
-    driver.get("https://www.saucedemo.com/")
-
-    # 1️⃣ 登入
-    login_page = LoginPage(driver)
-    login_page.login("standard_user", "secret_sauce")
-    time.sleep(2)
-
-    # 2️⃣ 進入購物車
-    inventory_page = InventoryPage(driver)
-    inventory_page.add_item_to_cart()
-    inventory_page.go_to_cart()
-    time.sleep(2)
-
-    # 3️⃣ 進入結帳
-    cart_page = CartPage(driver)
-    cart_page.proceed_to_checkout()
-    time.sleep(2)
-
-    # 4️⃣ 缺少必填資訊
-    checkout_page = CheckoutPage(driver)
-    checkout_page.enter_checkout_info("", "", "")
-    time.sleep(2)
-
-    # 5️⃣ 確認錯誤訊息
-    error_message = driver.find_element(By.CLASS_NAME, "error-message-container").text
-    assert "Error" in error_message, "錯誤處理測試失敗"
-    print("✅ 測試通過，缺少資訊時無法結帳")
-
+    driver.maximize_window()
+    yield driver
     driver.quit()
 
+class TestCheckout:
+    """ 電商網站的結帳測試 """
 
+    def test_complete_checkout(self, driver):
+        """ 測試完整結帳流程 """
+        login_page = LoginPage(driver)
+        login_page.login("standard_user", "secret_sauce")
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "inventory_list")))
 
-if __name__ == "__main__":
-    test_complete_checkout()
-    test_missing_info()
+        inventory_page = InventoryPage(driver)
+        inventory_page.sort_items("Price (low to high)")
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "inventory_item")))
+
+        inventory_page.add_item_to_cart()
+        inventory_page.go_to_cart()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "cart_list")))
+
+        cart_page = CartPage(driver)
+        cart_page.proceed_to_checkout()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "checkout_info")))
+
+        checkout_page = CheckoutPage(driver)
+        checkout_page.enter_checkout_info("Ezra", "Test", "12345")
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "checkout_summary_container")))
+
+        checkout_page.finish_checkout()
+        WebDriverWait(driver, 10).until(EC.url_contains("checkout-complete.html"))
+
+        assert "checkout-complete.html" in driver.current_url, "❌ 結帳流程測試失敗"
+        print("✅ 測試通過，成功完成結帳！")
+
+    def test_missing_info(self, driver):
+        """ 測試錯誤處理（缺少必填資訊） """
+        login_page = LoginPage(driver)
+        login_page.login("standard_user", "secret_sauce")
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "inventory_list")))
+
+        inventory_page = InventoryPage(driver)
+        inventory_page.add_item_to_cart()
+        inventory_page.go_to_cart()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "cart_list")))
+
+        cart_page = CartPage(driver)
+        cart_page.proceed_to_checkout()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "checkout_info")))
+
+        checkout_page = CheckoutPage(driver)
+        checkout_page.enter_checkout_info("", "", "")
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "error-message-container")))
+
+        error_message = driver.find_element(By.CLASS_NAME, "error-message-container").text
+        assert "Error" in error_message, "❌ 錯誤處理測試失敗"
+        print("✅ 測試通過，缺少資訊時無法結帳")
