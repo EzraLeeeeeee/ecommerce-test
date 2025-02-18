@@ -41,9 +41,6 @@ def driver(request):
 
     if browser == "chrome":
         options = ChromeOptions()
-        options.add_argument("--headless")  # 无界面模式
-        options.add_argument("--no-sandbox")  # 适用于无 root 权限环境
-        options.add_argument("--disable-dev-shm-usage")  # 解决共享内存问题
         service = ChromeService(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
 
