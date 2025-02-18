@@ -43,7 +43,9 @@ def driver(request):
         options = ChromeOptions()
         service = ChromeService(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
-        options.add_argument("--user-data-dir=/tmp/chrome_test_profile") #确保每次执行时都使用不同的目录路径。
+        options.add_argument("--headless")  # 无界面模式
+        options.add_argument("--no-sandbox")  # 适用于无 root 权限环境
+        options.add_argument("--disable-dev-shm-usage")  # 解决共享内存问题
 
     elif browser == "firefox":
         options = FirefoxOptions()
