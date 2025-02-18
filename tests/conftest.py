@@ -43,6 +43,7 @@ def driver(request):
         options = ChromeOptions()
         service = ChromeService(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
+        options.add_argument("--user-data-dir=/tmp/chrome_test_profile") #确保每次执行时都使用不同的目录路径。
 
     elif browser == "firefox":
         options = FirefoxOptions()
