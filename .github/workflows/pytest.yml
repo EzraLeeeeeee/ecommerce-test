@@ -11,50 +11,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 檢出代碼
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: 設置 Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: 安裝依賴
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt  # 確保包含 pytest, allure-pytest
           pip install pytest-html
-          pip install allure-pytest
 
-      - name: Install Google Chrome and ChromeDriver
+      - name: 安裝 Google Chrome 和 ChromeDriver
         run: |
           sudo apt update
           sudo apt install -y google-chrome-stable
           sudo apt install -y chromium-chromedriver
 
-      - name: Run tests with pytest (Headless Mode)
-        run: |
-          Xvfb :99 -screen 0 1920x1080x24 &
-          export DISPLAY=:99
-          pytest tests/test_checkout.py --browser=chrome --html=report.html --self-contained-html --alluredir=allure-results
-
-      - name: Install Allure
+      - name: 安裝 Allure
         run: |
           sudo apt-add-repository universe
           sudo apt update
           sudo apt install allure
 
-      - name: Generate Allure Report
+      - name: 執行測試 (Headless Mode)
+        run: |
+          Xvfb :99 -screen 0 1920x1080x24 &
+          export DISPLAY=:99
+          pytest tests/test_checkout.py --browser=chrome --html=report.html --self-contained-html --alluredir=allure-results
+
+      - name: 產生 Allure 報告
         run: |
           allure generate allure-results -o allure-report --clean
 
-      - name: Upload Allure Report (Artifacts)
+      - name: 上傳 Allure 報告
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: allure-report
 
-      - name: Upload test report
+      - name: 上傳測試報告
         uses: actions/upload-artifact@v4
         with:
           name: selenium-test-report
@@ -65,13 +64,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download Allure Report
+      - name: 下載 Allure 報告
         uses: actions/download-artifact@v4
         with:
           name: allure-report
           path: allure-report
 
-      - name: Deploy to GitHub Pages
+      - name: 部署到 GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
