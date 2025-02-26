@@ -30,6 +30,7 @@ jobs:
       - name: Install Allure
         run: |
           curl -o allure-commandline.tgz -L https://github.com/allure-framework/allure2/releases/download/2.25.0/allure-commandline-2.25.0.tgz
+          ls -l allure-commandline.tgz
           sudo tar -zxvf allure-commandline.tgz -C /opt/
           sudo ln -s /opt/allure-2.25.0/bin/allure /usr/bin/allure
           allure --version
