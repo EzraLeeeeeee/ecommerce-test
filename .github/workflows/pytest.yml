@@ -75,8 +75,15 @@ jobs:
           name: allure-report
           path: allure-report
 
+      - name: 手動初始化 Git（如果有問題）
+        run: |
+          git init
+          git remote add origin https://github.com/${{ github.repository }}.git
+          git fetch origin
+          git reset --hard origin/${{ github.ref_name }}
+
       - name: 部署到 GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages
-          folder: allure-report
+          branch: main
+          folder: root
