@@ -1,99 +1,40 @@
-name: Selenium Tests and Allure Report
+name: Selenium Tests
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+on: [push, pull_request]
 
 jobs:
-  test-and-deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 檢出代碼
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: 設置 Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: 安裝 Python 依賴
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  # 確保包含 pytest, allure-pytest
+          pip install -r requirements.txt
           pip install pytest-html
 
-      - name: 安裝 Google Chrome 和 ChromeDriver
+      - name: Install Google Chrome and ChromeDriver
         run: |
           sudo apt update
           sudo apt install -y google-chrome-stable
           sudo apt install -y chromium-chromedriver
 
-      - name: 安裝 Allure
-        run: |
-          sudo apt update
-          sudo apt install -y default-jre
-          curl -o allure-2.21.0.tgz -Ls https://github.com/allure-framework/allure2/releases/download/2.21.0/allure-2.21.0.tgz
-          tar -zxvf allure-2.21.0.tgz
-          sudo mv allure-2.21.0 /opt/allure
-          sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
-
-      - name: 確保 allure-results 目錄存在
-        run: mkdir -p allure-results
-
-      - name: 執行測試 (Headless Mode)
+      - name: Run tests with pytest (Headless Mode)
         run: |
           Xvfb :99 -screen 0 1920x1080x24 &
           export DISPLAY=:99
-          pytest tests/test_checkout.py --browser=chrome --html=report.html --self-contained-html --alluredir=allure-results
+          pytest tests/test_checkout.py --browser=chrome --html=report.html --self-contained-html
 
-      - name: 產生 Allure 測試報告
-        run: allure generate allure-results -o allure-report --clean
-
-      - name: 上傳 Allure 測試報告
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: allure-report
-
-      - name: 上傳測試報告
+      - name: Upload test report
         uses: actions/upload-artifact@v4
         with:
           name: selenium-test-report
           path: report.html
-
-      - name: 下載 Allure 測試報告
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-report
-          path: allure-report
-
-      - name: 手動初始化 Git（如果有問題）
-        run: |
-          git init
-          git remote add origin https://github.com/${{ github.repository }}.git
-          git fetch origin
-          git reset --hard origin/${{ github.ref_name }}
-
-      - name: 部署到 GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: main
-          folder: allure-report
-
-      - name: Create docs directory and add content
-        run: |
-          mkdir -p docs
-          echo "<html><body><h1>Hello World</h1></body></html>" > docs/index.html
-
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: main
-          folder: docs
-          token: ${{ secrets.GITHUB_TOKEN }}
-          clean: true
-          force: true
-          attempt-limit: 3
