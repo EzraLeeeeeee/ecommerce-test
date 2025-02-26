@@ -21,3 +21,12 @@ or
 ## 產生測試報告
 pytest tests/test_checkout.py --browser=chrome --html=reports/report.html --self-contained-html
 
+## CI/CD自動測試
+1. git add .
+2. git commit -m " 加入 GitHub Actions 自動測試"
+3. git push origin main
+4. 記得必須使用 無頭模式 (--headless)
+
+
+
+

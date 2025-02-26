@@ -1,6 +1,10 @@
-name: Selenium Tests
+name: Selenium Tests and Allure Report
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   test:
@@ -20,6 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest-html
+          pip install allure-pytest
 
       - name: Install Google Chrome and ChromeDriver
         run: |
@@ -31,10 +36,43 @@ jobs:
         run: |
           Xvfb :99 -screen 0 1920x1080x24 &
           export DISPLAY=:99
-          pytest tests/test_checkout.py --browser=chrome --html=report.html --self-contained-html
+          pytest tests/test_checkout.py --browser=chrome --html=report.html --self-contained-html --alluredir=allure-results
+
+      - name: Install Allure
+        run: |
+          sudo apt-add-repository universe
+          sudo apt update
+          sudo apt install allure
+
+      - name: Generate Allure Report
+        run: |
+          allure generate allure-results -o allure-report --clean
+
+      - name: Upload Allure Report (Artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
         with:
           name: selenium-test-report
           path: report.html
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Allure Report
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: allure-report
