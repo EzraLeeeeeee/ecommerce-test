@@ -27,11 +27,12 @@ jobs:
           sudo apt install -y google-chrome-stable
           sudo apt install -y chromium-chromedriver
 
-      - name: Install Allure commandline
+      - name: Install Allure
         run: |
-          sudo apt-add-repository ppa:qameta/allure -y
-          sudo apt update
-          sudo apt install allure -y
+          curl -o allure-commandline.tgz -OL https://github.com/allure-framework/allure2/releases/download/2.25.0/allure-commandline-2.25.0.tgz
+          sudo tar -zxvf allure-commandline.tgz -C /opt/
+          sudo ln -s /opt/allure-2.25.0/bin/allure /usr/bin/allure
+          allure --version
 
       - name: Run tests with pytest (Headless Mode)
         run: |
