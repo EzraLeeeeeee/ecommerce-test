@@ -23,6 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install allure-pytest
+          pip install pytest-html
 
       - name: Install Google Chrome and ChromeDriver
         run: |
@@ -42,16 +43,22 @@ jobs:
           Xvfb :99 -screen 0 1920x1080x24 &
           export DISPLAY=:99
           mkdir -p allure-results
-          pytest tests/test_checkout.py --browser=chrome --alluredir=allure-results
+          pytest tests/test_checkout.py --browser=chrome --html=report.html --self-contained-html --alluredir=allure-results
 
       - name: Generate Allure report
         run: allure generate allure-results -o allure-report --clean
 
-      - name: Upload test report (artifact)
+      - name: Upload Allure report (artifact)
         uses: actions/upload-artifact@v4
         with:
           name: allure-test-report
           path: allure-report
+
+      - name: Upload HTML test report (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-test-report
+          path: report.html
 
       - name: Deploy Allure Report to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
