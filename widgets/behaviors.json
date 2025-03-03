@@ -1,1 +1,1 @@
-{"total":10,"items":[{"uid":"70055f9d90ce8d221dc5988ef57a4a18","name":"登入 API","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}},{"uid":"235a5c59ae5499e78fa586431828f7fb","name":"獲取產品列表 API","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}},{"uid":"d74036b36b701ec6ad6a09bea7f290ee","name":"下單 API","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}}]}
+{"total":2,"items":[]}
