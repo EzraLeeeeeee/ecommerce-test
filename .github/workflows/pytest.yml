@@ -38,11 +38,13 @@ jobs:
           sudo ln -s /opt/allure-2.32.2/bin/allure /usr/bin/allure
           allure --version
 
+      - name: Clear old Allure results
+        run: rm -rf allure-results && mkdir allure-results
+
       - name: Run tests with pytest (Headless Mode)
         run: |
           Xvfb :99 -screen 0 1920x1080x24 &
           export DISPLAY=:99
-          mkdir -p allure-results
           pytest tests/test_checkout.py --browser=chrome --html=report.html --self-contained-html --alluredir=allure-results
 
       - name: Generate Allure report
@@ -65,4 +67,3 @@ jobs:
         with:
           branch: gh-pages # GitHub Pages 分支
           folder: allure-report # 部署的目录
-
