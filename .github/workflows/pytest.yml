@@ -2,6 +2,9 @@ name: Selenium Tests
 
 on: [push, pull_request]
 
+permissions:
+  contents: write # 允许写入 GitHub Pages 分支
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -30,7 +33,6 @@ jobs:
       - name: Install Allure
         run: |
           curl -o allure-commandline.tgz -L https://github.com/allure-framework/allure2/releases/download/2.32.2/allure-2.32.2.tgz
-          ls -l allure-commandline.tgz
           sudo tar -zxvf allure-commandline.tgz -C /opt/
           sudo ln -s /opt/allure-2.32.2/bin/allure /usr/bin/allure
           allure --version
@@ -43,10 +45,16 @@ jobs:
           pytest tests/test_checkout.py --browser=chrome --alluredir=allure-results
 
       - name: Generate Allure report
-        run: allure generate allure-results -o allure-report
+        run: allure generate allure-results -o allure-report --clean
 
-      - name: Upload test report
+      - name: Upload test report (artifact)
         uses: actions/upload-artifact@v4
         with:
           name: allure-test-report
           path: allure-report
+
+      - name: Deploy Allure Report to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages # GitHub Pages 分支
+          folder: allure-report # 部署的目录
