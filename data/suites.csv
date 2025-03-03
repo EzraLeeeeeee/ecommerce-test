@@ -1,3 +1,3 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-" 測試錯誤處理（缺少必填資訊） ","589","test_missing_info","tests","Mon Mar 03 05:47:58 UTC 2025","passed","Mon Mar 03 05:47:58 UTC 2025","TestCheckout","test_checkout","",""
-" 測試完整結帳流程 ","747","test_complete_checkout","tests","Mon Mar 03 05:47:56 UTC 2025","passed","Mon Mar 03 05:47:57 UTC 2025","TestCheckout","test_checkout","",""
+" 測試完整結帳流程 ","1294","test_complete_checkout","tests","Mon Mar 03 06:24:00 UTC 2025","passed","Mon Mar 03 06:24:01 UTC 2025","TestCheckout","test_checkout","",""
+" 測試錯誤處理（缺少必填資訊） ","613","test_missing_info","tests","Mon Mar 03 06:24:02 UTC 2025","passed","Mon Mar 03 06:24:02 UTC 2025","TestCheckout","test_checkout","",""
