@@ -17,3 +17,4 @@
 2. git commit -m " 加入 GitHub Actions 自動測試"
 3. git push origin main
 4. 記得必須使用 無頭模式 (--headless)
+5. https://ezraleeeeeee.github.io/ecommerce-test/     ## 瀏覽器看Allue Report

@@ -41,7 +41,14 @@ def test_complete_checkout():
         time.sleep(2)
 
         # 3️⃣ 加入商品到購物車並進入購物車頁面
-        inventory_page.add_item_to_cart()
+        # inventory_page.add_item_to_cart(index=0)  # 加入第一個商品
+        # inventory_page.add_item_to_cart(index=1)  # 加入第二個商品
+        # inventory_page.add_item_to_cart(index=2)  # 加入第三個商品
+
+        # 3️⃣ 加入所有商品到購物車
+        for i in range(6):  # SauceDemo 有 6 個商品
+            inventory_page.add_item_to_cart(index=i)
+
         inventory_page.go_to_cart()
         time.sleep(2)
 
@@ -52,7 +59,7 @@ def test_complete_checkout():
 
         # 5️⃣ 填寫結帳資訊
         checkout_page = CheckoutPage(driver)
-        checkout_page.enter_checkout_info("Ezra", "Test", "12345")
+        checkout_page.enter_checkout_info("Ezra", "Lee", "12345")
         time.sleep(2)
 
         # 6️⃣ 完成下單

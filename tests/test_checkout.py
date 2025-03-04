@@ -79,11 +79,18 @@ class TestCheckout:
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "cart_list")))
 
         cart_page = CartPage(driver)
-        cart_page.proceed_to_checkout()
+        # 3️⃣ 加入商品到購物車並進入購物車頁面
+        # inventory_page.add_item_to_cart(index=0)  # 加入第一個商品
+        # inventory_page.add_item_to_cart(index=1)  # 加入第二個商品
+        # inventory_page.add_item_to_cart(index=2)  # 加入第三個商品
+
+        # 3️⃣ 加入所有商品到購物車
+        for i in range(6):  # SauceDemo 有 6 個商品
+            inventory_page.add_item_to_cart(index=i)
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "checkout_info")))
 
         checkout_page = CheckoutPage(driver)
-        checkout_page.enter_checkout_info("Ezra", "Test", "12345")
+        checkout_page.enter_checkout_info("Ezra", "Lee", "12345")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "checkout_summary_container")))
 
         checkout_page.finish_checkout()
