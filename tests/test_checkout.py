@@ -1,6 +1,4 @@
 #連結GitHub Actions
-
-
 import pytest
 import sys
 import os
@@ -18,7 +16,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 
 from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
