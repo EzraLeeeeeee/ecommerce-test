@@ -11,6 +11,7 @@
 
 ## 產生測試報告
 1. pytest tests/test_checkout.py --browser=chrome --html=reports/report.html --self-contained-html
+2. pytest tests/test_checkout.py --browser=edge --html=reports/report.html --self-contained-html
 
 ## CI/CD自動測試
 1. git add .
@@ -18,3 +19,9 @@
 3. git push origin main
 4. 記得必須使用 無頭模式 (--headless)
 5. https://ezraleeeeeee.github.io/ecommerce-test/     ## 瀏覽器看Allue Report
+
+
+
+## API Test
+1. pytest API_Test/test_API.py --alluredir=./allure-results
+2. allure serve ./allure-results

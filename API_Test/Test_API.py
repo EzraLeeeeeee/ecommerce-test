@@ -2,6 +2,7 @@ import requests
 import pytest
 import allure
 
+
 BASE_URL = "https://fakestoreapi.com"
 
 @allure.feature("登入 API")

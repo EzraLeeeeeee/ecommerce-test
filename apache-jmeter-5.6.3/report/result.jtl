@@ -1,0 +1,31 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1741923700043,886,Login API,200,OK,Thread Group 1-1,text,true,,2880,378,2,2,https://reqres.in/api/login,339,0,170
+1741923700043,339,Login API-0,301,Moved Permanently,Thread Group 1-1,text,true,,996,226,2,2,http://reqres.in/api/login,339,0,170
+1741923700383,546,Login API-1,200,OK,Thread Group 1-1,text,true,,1884,152,2,2,https://reqres.in/api/login,545,0,367
+1741923700554,724,Login API,200,OK,Thread Group 1-2,text,true,,2872,393,2,2,https://reqres.in/api/login,277,0,135
+1741923700554,277,Login API-0,301,Moved Permanently,Thread Group 1-2,text,true,,990,241,2,2,http://reqres.in/api/login,277,0,135
+1741923700831,447,Login API-1,200,OK,Thread Group 1-2,text,true,,1882,152,2,2,https://reqres.in/api/login,447,0,281
+1741923701058,711,Login API,200,OK,Thread Group 1-3,text,true,,2869,395,2,2,https://reqres.in/api/login,280,0,136
+1741923701058,280,Login API-0,301,Moved Permanently,Thread Group 1-3,text,true,,989,243,2,2,http://reqres.in/api/login,280,0,136
+1741923701339,430,Login API-1,200,OK,Thread Group 1-3,text,true,,1880,152,2,2,https://reqres.in/api/login,430,0,279
+1741923701542,785,Login API,200,OK,Thread Group 1-4,text,true,,2872,393,2,2,https://reqres.in/api/login,339,0,162
+1741923701542,339,Login API-0,301,Moved Permanently,Thread Group 1-4,text,true,,992,241,2,2,http://reqres.in/api/login,339,0,162
+1741923701881,446,Login API-1,200,OK,Thread Group 1-4,text,true,,1880,152,2,2,https://reqres.in/api/login,446,0,277
+1741923702045,798,Login API,200,OK,Thread Group 1-5,text,true,,2873,378,2,2,https://reqres.in/api/login,282,0,132
+1741923702045,282,Login API-0,301,Moved Permanently,Thread Group 1-5,text,true,,991,226,2,2,http://reqres.in/api/login,282,0,132
+1741923702327,516,Login API-1,200,OK,Thread Group 1-5,text,true,,1882,152,2,2,https://reqres.in/api/login,516,0,336
+1741923702542,805,Login API,200,OK,Thread Group 1-6,text,true,,2878,393,2,2,https://reqres.in/api/login,291,0,137
+1741923702542,291,Login API-0,301,Moved Permanently,Thread Group 1-6,text,true,,993,241,2,2,http://reqres.in/api/login,291,0,137
+1741923702835,512,Login API-1,200,OK,Thread Group 1-6,text,true,,1885,152,2,2,https://reqres.in/api/login,512,0,336
+1741923703042,740,Login API,200,OK,Thread Group 1-7,text,true,,2874,395,2,2,https://reqres.in/api/login,301,0,141
+1741923703042,301,Login API-0,301,Moved Permanently,Thread Group 1-7,text,true,,994,243,2,2,http://reqres.in/api/login,301,0,141
+1741923703344,438,Login API-1,200,OK,Thread Group 1-7,text,true,,1880,152,2,2,https://reqres.in/api/login,438,0,285
+1741923703543,756,Login API,200,OK,Thread Group 1-8,text,true,,2872,393,2,2,https://reqres.in/api/login,329,0,157
+1741923703543,329,Login API-0,301,Moved Permanently,Thread Group 1-8,text,true,,990,241,2,2,http://reqres.in/api/login,329,0,157
+1741923703873,426,Login API-1,200,OK,Thread Group 1-8,text,true,,1882,152,2,2,https://reqres.in/api/login,426,0,278
+1741923704042,721,Login API,200,OK,Thread Group 1-9,text,true,,2877,378,2,2,https://reqres.in/api/login,289,0,147
+1741923704042,289,Login API-0,301,Moved Permanently,Thread Group 1-9,text,true,,997,226,2,2,http://reqres.in/api/login,289,0,147
+1741923704331,432,Login API-1,200,OK,Thread Group 1-9,text,true,,1880,152,2,2,https://reqres.in/api/login,432,0,279
+1741923704543,1137,Login API,200,OK,Thread Group 1-10,text,true,,2881,393,1,1,https://reqres.in/api/login,321,0,135
+1741923704543,321,Login API-0,301,Moved Permanently,Thread Group 1-10,text,true,,999,241,1,1,http://reqres.in/api/login,321,0,135
+1741923704864,816,Login API-1,200,OK,Thread Group 1-10,text,true,,1882,152,1,1,https://reqres.in/api/login,815,0,666
