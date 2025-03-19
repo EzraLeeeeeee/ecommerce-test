@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import ElementClickInterceptedException
 
 class InventoryPage:
     def __init__(self, driver):
@@ -24,7 +25,15 @@ class InventoryPage:
 
     def go_to_cart(self):
         """ 點擊購物車按鈕 """
-        self.driver.find_element(*self.cart_icon).click()
+        try:
+            # 嘗試使用顯式等待和常規點擊
+            WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.cart_icon)
+            ).click()
+        except ElementClickInterceptedException:
+            # 如果常規點擊失敗，使用 JavaScript 點擊
+            cart_element = self.driver.find_element(*self.cart_icon)
+            self.driver.execute_script("arguments[0].click();", cart_element)
 
     def add_multiple_items_to_cart(self, item_names):
         """
