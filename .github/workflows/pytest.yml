@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🚀 Checkout repository
+      - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
       - name: 🛠 Debug repository structure
@@ -109,32 +109,30 @@ jobs:
 
       - name: 📦 Install JMeter
         run: |
-          wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.6.3.tgz
+          wget https://dlcdn.apache.org/jmeter/binaries/apache-jmeter-5.6.3.tgz
           tar -xzf apache-jmeter-5.6.3.tgz
           mv apache-jmeter-5.6.3 jmeter
 
+      - name: 🔧 Add JMeter to PATH
+        run: echo "$GITHUB_WORKSPACE/jmeter/bin" >> $GITHUB_PATH
+
       - name: 🛠 Check JMeter Installation
         run: |
-          jmeter/bin/jmeter -v
+          which jmeter
+          jmeter -v
 
-      - name: 🛠️ Install Allure
+      - name: 🔍 Debug File Paths
         run: |
-          curl -o allure-commandline.tgz -L https://github.com/allure-framework/allure2/releases/download/2.32.2/allure-2.32.2.tgz
-          sudo tar -zxvf allure-commandline.tgz -C /opt/
-          sudo ln -s /opt/allure-2.32.2/bin/allure /usr/bin/allure
-          allure --version
-
-      - name: 🧹 Clear old Allure results
-        run: rm -rf allure-results && mkdir allure-results
+          pwd
+          ls -lah
+          ls -lah tests/
+          ls -lah tests/jmeter/
 
       - name: 🔥 Run JMeter Test
-        run: |
-          jmeter/bin/jmeter -n -t tests/jmeter/Saucedemo_test.jmx -l result.jtl
-          cp result.jtl allure-results/ # 保存 JMeter 结果
+        run: jmeter -n -t $GITHUB_WORKSPACE/tests/jmeter/Saucedemo_test.jmx -l result.jtl
 
       - name: 📊 Generate JMeter Report
-        run: |
-          jmeter/bin/jmeter -g result.jtl -o jmeter-report
+        run: jmeter -g result.jtl -o jmeter-report
 
       - name: 📤 Upload JMeter Report
         uses: actions/upload-artifact@v4
