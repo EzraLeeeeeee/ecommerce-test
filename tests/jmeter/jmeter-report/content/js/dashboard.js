@@ -133,7 +133,7 @@ $(document).ready(function() {
         widgets: ['zebra']
     });
 
-    var data = {"OkPercent": 75.0, "KoPercent": 25.0};
+    var data = {"OkPercent": 100.0, "KoPercent": 0.0};
     var dataset = [
         {
             "label" : "FAIL",
@@ -173,7 +173,7 @@ $(document).ready(function() {
     });
 
     // Creates APDEX table
-    createTable($("#apdexTable"), {"supportsControllersDiscrimination": true, "overall": {"data": [0.7054166666666667, 500, 1500, "Total"], "isController": false}, "titles": ["Apdex", "T (Toleration threshold)", "F (Frustration threshold)", "Label"], "items": [{"data": [0.8316666666666667, 500, 1500, "Get_Products_API"], "isController": false}, {"data": [1.0, 500, 1500, "Create_Order_API"], "isController": false}, {"data": [0.99, 500, 1500, "Login_API"], "isController": false}, {"data": [0.0, 500, 1500, "HTTP Request"], "isController": false}]}, function(index, item){
+    createTable($("#apdexTable"), {"supportsControllersDiscrimination": true, "overall": {"data": [0.9038888888888889, 500, 1500, "Total"], "isController": false}, "titles": ["Apdex", "T (Toleration threshold)", "F (Frustration threshold)", "Label"], "items": [{"data": [0.725, 500, 1500, "Get_Products_API"], "isController": false}, {"data": [0.9966666666666667, 500, 1500, "Create_Order_API"], "isController": false}, {"data": [0.99, 500, 1500, "Login_API"], "isController": false}]}, function(index, item){
         switch(index){
             case 0:
                 item = item.toFixed(3);
@@ -187,7 +187,7 @@ $(document).ready(function() {
     }, [[0, 0]], 3);
 
     // Create statistics table
-    createTable($("#statisticsTable"), {"supportsControllersDiscrimination": true, "overall": {"data": ["Total", 1200, 300, 25.0, 363.7683333333337, 287, 1058, 308.0, 434.0, 642.95, 860.98, 214.89971346704868, 769.3413239837034, 58.40749658622851], "isController": false}, "titles": ["Label", "#Samples", "FAIL", "Error %", "Average", "Min", "Max", "Median", "90th pct", "95th pct", "99th pct", "Transactions/s", "Received", "Sent"], "items": [{"data": ["Get_Products_API", 300, 0, 0.0, 446.29666666666657, 292, 1058, 316.0, 740.7, 817.6999999999999, 1045.1500000000008, 65.25995214270176, 734.15321813139, 12.491162714814008], "isController": false}, {"data": ["Create_Order_API", 300, 0, 0.0, 302.2133333333331, 287, 360, 299.0, 313.90000000000003, 324.0, 351.98, 71.97696737044146, 70.86076205614204, 26.49933271353167], "isController": false}, {"data": ["Login_API", 300, 0, 0.0, 403.67666666666685, 384, 554, 399.0, 414.7000000000001, 426.95, 522.98, 70.37297677691765, 71.77654197454844, 18.96771639690359], "isController": false}, {"data": ["HTTP Request", 300, 300, 100.0, 302.8866666666666, 287, 428, 300.0, 312.0, 318.0, 407.4500000000005, 72.01152184349496, 76.75673420247239, 18.583051413226116], "isController": false}]}, function(index, item){
+    createTable($("#statisticsTable"), {"supportsControllersDiscrimination": true, "overall": {"data": ["Total", 900, 0, 0.0, 490.112222222223, 288, 2226, 337.0, 1161.8999999999992, 1689.0, 1985.9, 147.2272206772452, 650.4323202089809, 40.688772902012104], "isController": false}, "titles": ["Label", "#Samples", "FAIL", "Error %", "Average", "Min", "Max", "Median", "90th pct", "95th pct", "99th pct", "Transactions/s", "Received", "Sent"], "items": [{"data": ["Get_Products_API", 300, 0, 0.0, 748.5899999999999, 292, 2226, 322.5, 1789.9000000000003, 1916.3999999999999, 2105.9700000000003, 55.55555555555555, 624.9688946759259, 10.633680555555555], "isController": false}, {"data": ["Create_Order_API", 300, 0, 0.0, 308.16333333333347, 288, 584, 303.0, 326.90000000000003, 338.9, 415.40000000000055, 77.7000777000777, 76.44124538655788, 28.60637626262626], "isController": false}, {"data": ["Login_API", 300, 0, 0.0, 413.58333333333337, 385, 764, 406.0, 433.0, 445.0, 650.8700000000001, 75.73844988639232, 77.28379039383994, 20.413879070941682], "isController": false}]}, function(index, item){
         switch(index){
             // Errors pct
             case 3:
@@ -217,7 +217,7 @@ $(document).ready(function() {
     }, [[0, 0]], 0, summaryTableHeader);
 
     // Create error table
-    createTable($("#errorsTable"), {"supportsControllersDiscrimination": false, "titles": ["Type of error", "Number of errors", "% in errors", "% in all samples"], "items": [{"data": ["400/Bad Request", 300, 100.0, 25.0], "isController": false}]}, function(index, item){
+    createTable($("#errorsTable"), {"supportsControllersDiscrimination": false, "titles": ["Type of error", "Number of errors", "% in errors", "% in all samples"], "items": []}, function(index, item){
         switch(index){
             case 2:
             case 3:
@@ -228,7 +228,7 @@ $(document).ready(function() {
     }, [[1, 1]]);
 
         // Create top5 errors by sampler
-    createTable($("#top5ErrorsBySamplerTable"), {"supportsControllersDiscrimination": false, "overall": {"data": ["Total", 1200, 300, "400/Bad Request", 300, "", "", "", "", "", "", "", ""], "isController": false}, "titles": ["Sample", "#Samples", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors"], "items": [{"data": [], "isController": false}, {"data": [], "isController": false}, {"data": [], "isController": false}, {"data": ["HTTP Request", 300, 300, "400/Bad Request", 300, "", "", "", "", "", "", "", ""], "isController": false}]}, function(index, item){
+    createTable($("#top5ErrorsBySamplerTable"), {"supportsControllersDiscrimination": false, "overall": {"data": ["Total", 900, 0, "", "", "", "", "", "", "", "", "", ""], "isController": false}, "titles": ["Sample", "#Samples", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors"], "items": [{"data": [], "isController": false}, {"data": [], "isController": false}, {"data": [], "isController": false}]}, function(index, item){
         return item;
     }, [[0, 0]], 0);
 
