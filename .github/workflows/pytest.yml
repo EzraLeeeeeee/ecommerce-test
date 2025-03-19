@@ -133,8 +133,18 @@ jobs:
           ls -lah tests/
           ls -lah tests/jmeter/
 
-      - name: 🔥 Run JMeter Test
-        run: jmeter -n -t $GITHUB_WORKSPACE/tests/jmeter/New_Saucedemo_test.jmx -l new_results1.jtl -Jjmeter.save.saveservice.output_format=xml
+      - name: 🔥 Run JMeter Test (Force Full XML Format)
+        run: |
+          jmeter -n -t $GITHUB_WORKSPACE/tests/jmeter/New_Saucedemo_test.jmx -l new_results1.jtl \
+          -Jjmeter.save.saveservice.output_format=xml \
+          -Jjmeter.save.saveservice.assertion_results=all \
+          -Jjmeter.save.saveservice.data_type=true \
+          -Jjmeter.save.saveservice.label=true \
+          -Jjmeter.save.saveservice.response_code=true \
+          -Jjmeter.save.saveservice.response_message=true \
+          -Jjmeter.save.saveservice.successful=true \
+          -Jjmeter.save.saveservice.thread_name=true \
+          -Jjmeter.save.saveservice.time=true
 
       - name: 🛠 Debug JMeter Results
         run: |
