@@ -84,6 +84,11 @@ jobs:
       - name: 🚀 Checkout repository
         uses: actions/checkout@v4
 
+      - name: 🛠 Debug repository structure
+        run: |
+          pwd
+          ls -lah
+
       - name: 📥 Set up Python
         uses: actions/setup-python@v5
         with:
@@ -102,13 +107,15 @@ jobs:
           sudo apt install -y google-chrome-stable
           sudo apt install -y chromium-chromedriver
 
-      - name: 🔥 Install JMeter
+      - name: 📦 Install JMeter
         run: |
-          JMETER_VERSION=5.6.3
-          wget https://downloads.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
-          tar -xzf apache-jmeter-${JMETER_VERSION}.tgz
-          sudo mv apache-jmeter-${JMETER_VERSION} /opt/jmeter
-          sudo ln -s /opt/jmeter/bin/jmeter /usr/bin/jmeter
+          wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.6.3.tgz
+          tar -xzf apache-jmeter-5.6.3.tgz
+          mv apache-jmeter-5.6.3 jmeter
+
+      - name: 🛠 Check JMeter Installation
+        run: |
+          jmeter/bin/jmeter -v
 
       - name: 🛠️ Install Allure
         run: |
@@ -120,14 +127,24 @@ jobs:
       - name: 🧹 Clear old Allure results
         run: rm -rf allure-results && mkdir allure-results
 
-      - name: 🔥 Run JMeter Performance Test
+      - name: 🔥 Run JMeter Test
         run: |
-          jmeter -n -t apache-jmeter-5.6.3/bin/Saucedemo_test.jmx -l result.jtl
+          jmeter/bin/jmeter -n -t tests/jmeter/Saucedemo_test.jmx -l result.jtl
           cp result.jtl allure-results/ # 保存 JMeter 结果
+
+      - name: 📊 Generate JMeter Report
+        run: |
+          jmeter/bin/jmeter -g result.jtl -o jmeter-report
+
+      - name: 📤 Upload JMeter Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-test-report
+          path: jmeter-report
 
       - name: 🚀 Run API Tests (pytest + Allure)
         run: |
-          pytest test_api.py --alluredir=allure-results
+          pytest API_Test/Test_API.py --alluredir=allure-results
 
       - name: 🎯 Run Selenium UI Tests (Headless Mode)
         run: |
