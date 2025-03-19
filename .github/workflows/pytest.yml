@@ -1,4 +1,75 @@
-name: Selenium Tests
+# name: Selenium Tests
+
+# on: [push, pull_request]
+
+# permissions:
+#   contents: write # 允许写入 GitHub Pages 分支
+
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: "3.12"
+
+#       - name: Install dependencies
+#         run: |
+#           python -m pip install --upgrade pip
+#           pip install -r requirements.txt
+#           pip install allure-pytest
+#           pip install pytest-html
+
+#       - name: Install Google Chrome and ChromeDriver
+#         run: |
+#           sudo apt update
+#           sudo apt install -y google-chrome-stable
+#           sudo apt install -y chromium-chromedriver
+
+#       - name: Install Allure
+#         run: |
+#           curl -o allure-commandline.tgz -L https://github.com/allure-framework/allure2/releases/download/2.32.2/allure-2.32.2.tgz
+#           sudo tar -zxvf allure-commandline.tgz -C /opt/
+#           sudo ln -s /opt/allure-2.32.2/bin/allure /usr/bin/allure
+#           allure --version
+
+#       - name: Clear old Allure results
+#         run: rm -rf allure-results && mkdir allure-results
+
+#       - name: Run tests with pytest (Headless Mode)
+#         run: |
+#           Xvfb :99 -screen 0 1920x1080x24 &
+#           export DISPLAY=:99
+#           mkdir -p allure-results
+#           pytest tests/test_checkout.py --browser=chrome --html=report.html --self-contained-html --alluredir=allure-results
+
+#       - name: Generate Allure report
+#         run: allure generate allure-results -o allure-report --clean
+
+#       - name: Upload Allure report (artifact)
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: allure-test-report
+#           path: allure-report
+
+#       - name: Upload HTML test report (artifact)
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: html-test-report
+#           path: report.html
+
+#       - name: Deploy Allure Report to GitHub Pages
+#         uses: JamesIves/github-pages-deploy-action@v4
+#         with:
+#           branch: gh-pages # GitHub Pages 分支
+#           folder: allure-report # 部署的目录
+
+name: Automated Tests
 
 on: [push, pull_request]
 
@@ -10,62 +81,76 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 🚀 Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: 📥 Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install allure-pytest
           pip install pytest-html
 
-      - name: Install Google Chrome and ChromeDriver
+      - name: 🛠️ Install Google Chrome and ChromeDriver
         run: |
           sudo apt update
           sudo apt install -y google-chrome-stable
           sudo apt install -y chromium-chromedriver
 
-      - name: Install Allure
+      - name: 🔥 Install JMeter
+        run: |
+          wget https://downloads.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
+          tar -xzf apache-jmeter-5.5.tgz
+          sudo mv apache-jmeter-5.5 /opt/jmeter
+          sudo ln -s /opt/jmeter/bin/jmeter /usr/bin/jmeter
+
+      - name: 🛠️ Install Allure
         run: |
           curl -o allure-commandline.tgz -L https://github.com/allure-framework/allure2/releases/download/2.32.2/allure-2.32.2.tgz
           sudo tar -zxvf allure-commandline.tgz -C /opt/
           sudo ln -s /opt/allure-2.32.2/bin/allure /usr/bin/allure
           allure --version
 
-      - name: Clear old Allure results
+      - name: 🧹 Clear old Allure results
         run: rm -rf allure-results && mkdir allure-results
 
-      - name: Run tests with pytest (Headless Mode)
+      - name: 🔥 Run JMeter Performance Test
+        run: |
+          jmeter -n -t test-plan.jmx -l result.jtl
+          cp result.jtl allure-results/ # 保存 JMeter 结果
+
+      - name: 🚀 Run API Tests (pytest + Allure)
+        run: |
+          pytest test_api.py --alluredir=allure-results
+
+      - name: 🎯 Run Selenium UI Tests (Headless Mode)
         run: |
           Xvfb :99 -screen 0 1920x1080x24 &
           export DISPLAY=:99
-          mkdir -p allure-results
           pytest tests/test_checkout.py --browser=chrome --html=report.html --self-contained-html --alluredir=allure-results
 
-      - name: Generate Allure report
+      - name: 📊 Generate Allure report
         run: allure generate allure-results -o allure-report --clean
 
-      - name: Upload Allure report (artifact)
+      - name: 📤 Upload Allure report (artifact)
         uses: actions/upload-artifact@v4
         with:
           name: allure-test-report
           path: allure-report
 
-      - name: Upload HTML test report (artifact)
+      - name: 📤 Upload HTML test report (artifact)
         uses: actions/upload-artifact@v4
         with:
           name: html-test-report
           path: report.html
 
-      - name: Deploy Allure Report to GitHub Pages
+      - name: 🚀 Deploy Allure Report to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages # GitHub Pages 分支
           folder: allure-report # 部署的目录
-
