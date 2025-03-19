@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jmeter-results
-          path: new_results1.jtl
+          path: ./tests/jmeter/new_results1.jtl
           if-no-files-found: error
 
       - name: Install Google Chrome and ChromeDriver
