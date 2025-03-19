@@ -134,7 +134,7 @@ jobs:
           ls -lah tests/jmeter/
 
       - name: 🔥 Run JMeter Test
-        run: jmeter -n -t $GITHUB_WORKSPACE/tests/jmeter/New_Saucedemo_test.jmx -l new_results1.jtl
+        run: jmeter -n -t $GITHUB_WORKSPACE/tests/jmeter/New_Saucedemo_test.jmx -l new_results1.jtl -Jjmeter.save.saveservice.output_format=xml
 
       - name: 🛠 Debug JMeter Results
         run: |
