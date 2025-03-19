@@ -101,6 +101,11 @@ jobs:
           pip install allure-pytest
           pip install pytest-html
 
+      - name: 🛠 Clear GitHub Actions Cache
+        run: |
+          rm -rf ~/.cache/
+          rm -rf ~/.m2/
+
       - name: 🛠️ Install Google Chrome and ChromeDriver
         run: |
           sudo apt update
@@ -129,10 +134,10 @@ jobs:
           ls -lah tests/jmeter/
 
       - name: 🔥 Run JMeter Test
-        run: jmeter -n -t $GITHUB_WORKSPACE/tests/jmeter/Saucedemo_test.jmx -l result.jtl
+        run: jmeter -n -t $GITHUB_WORKSPACE/tests/jmeter/New_Saucedemo_test.jmx -l new_results1.jtl
 
       - name: 📊 Generate JMeter Report
-        run: jmeter -g result.jtl -o jmeter-report
+        run: jmeter -g new_results1.jtl -o jmeter-report
 
       - name: 📤 Upload JMeter Report
         uses: actions/upload-artifact@v4
