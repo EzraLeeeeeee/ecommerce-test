@@ -158,6 +158,11 @@ jobs:
       - name: 🔍 Debug JMeter Test File
         run: ls -lah $GITHUB_WORKSPACE/tests/jmeter/
 
+      - name: 🛠 Debug JTL File
+        run: |
+          echo "🔍 Checking JTL file format..."
+          cat new_results1.jtl | head -n 20
+
       - name: 📊 Generate JMeter Report
         run: jmeter -g new_results1.jtl -o jmeter-report
 
